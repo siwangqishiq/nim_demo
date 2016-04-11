@@ -395,6 +395,7 @@
     <string name="download_progress_description">%1$s（%2$s/%3$s）</string>
     <string name="download_video">正在下载视频</string>
     <string name="download_video_fail">视频下载失败,请重试</string>
+    <string name="draft">[草稿]</string>
     <string name="edit">编辑</string>
     <string name="empty"/>
     <string name="file_transfer_state_downloaded">已下载</string>

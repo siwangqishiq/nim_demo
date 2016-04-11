@@ -3,6 +3,8 @@ package com.netease.nim.uikit.session.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
@@ -21,6 +23,7 @@ import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.CustomNotification;
 
 import java.util.List;
+import java.util.concurrent.RunnableFuture;
 
 
 /**
@@ -41,6 +44,14 @@ public class P2PMessageActivity extends BaseMessageActivity {
 
         context.startActivity(intent);
     }
+
+    private final Handler mUIHandler = new Handler(Looper.myLooper());
+    private final Runnable mSetNameTitleRunnable = new Runnable() {
+        @Override
+        public void run() {
+            requestBuddyInfo();
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -152,14 +163,19 @@ public class P2PMessageActivity extends BaseMessageActivity {
             int id = json.getIntValue("id");
             if (id == 1) {
                 // 正在输入
-                Toast.makeText(P2PMessageActivity.this, "对方正在输入...", Toast.LENGTH_LONG).show();
+                // Toast.makeText(P2PMessageActivity.this, "对方正在输入...", Toast.LENGTH_LONG).show();
+                showInputMessage();
             } else {
                 Toast.makeText(P2PMessageActivity.this, "command: " + content, Toast.LENGTH_SHORT).show();
             }
-
         } catch (Exception e) {
-
         }
+    }
+
+    private void showInputMessage() {
+        mUIHandler.removeCallbacks(mSetNameTitleRunnable);
+        setTitle("对方正在输入...");
+        mUIHandler.postDelayed(mSetNameTitleRunnable, 1500);
     }
 
     @Override
